@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="ja">
+    <head>
+        <title>試験入力シート</title>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="lib/bootstrap-4.5.0-dist/css/bootstrap.css">
+
+        <!-- The core Firebase JS SDK is always required and must be listed first -->
+        <script src="/__/firebase/7.17.1/firebase-app.js"></script>
+        <script src="/__/firebase/7.17.1/firebase-firestore.js"></script>
+
+        <!-- TODO: Add SDKs for Firebase products that you want to use
+            https://firebase.google.com/docs/web/setup#available-libraries -->
+
+        <!-- Initialize Firebase -->
+        <script src="/__/firebase/init.js"></script>
+
+        <script src="lib/js/answer.js"></script>
+    </head>
+    <body>
+            <main id="vueapp">
+                <div class="py-0" :class="[isover?'d-none':'d-block']">
+                    <div class="py-4 bg-primary">
+                        <div class="container">
+                            <div class="d-flex flex-row align-items-center justify-content-between">
+                                <div class="h4 text-white">試験入力シート</div>
+                                <a name="" id="" class="btn btn-success" href="allrs.html" role="button">試験結果</a>
+                            </div>
+                        </div>
+                    </div>
+    
+    
+                    <div class="py-4">
+                        <div class="container">
+                            <div class="d-flex flex-column">
+                                <div class="py-2">
+                                    <div class="form-group">
+                                        <label for="">仮免試験番号</label>
+                                        <select class="form-control" v-model="answerobj['testnumber']">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                        </select>
+                                    </div>
+                                </div>
+    
+    
+                                <div v-for="item in 50">
+                                    <div class="py-3 d-flex flex-column">
+                                        <div class="py-1 w-100 bg-dark"></div>
+                                        <div class="mt-2 font-weight-bolder">問題{{item}}</div>
+                                        <div class="d-flex flex-row">
+                                            <div class="form-check ml-5 mt-4">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" v-model="answerobj['answer'+item]" value="O">
+                                                    正
+                                                </label>
+                                            </div>
+                                            <div class="form-check ml-5 mt-4">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" v-model="answerobj['answer'+item]" value="X">
+                                                    誤
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+    
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="pt-4">
+                        <hr>
+                    </div>
+                    <div class="py-4">
+                        <div class="container">
+                            <div class="row align-items-end">
+                                <div class="col-6">
+                                    <a class="btn btn-light btn-block" href="index.html" role="button">取り消し</a>
+                                </div>
+                                <div class="col-6">
+                                    <button type="button" class="btn btn-primary btn-lg btn-block" @click="btnsave">提出</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="py-0" :class="[isover?'d-block':'d-none']">
+                    <div class="py-4 bg-primary">
+                        <div class="container">
+                            <div class="d-flex flex-row align-items-center">
+                                <div class="h4 text-white">試験結果</div>
+                                <div class="ml-4 h1 text-white">{{answerobj.testnumber}}</div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="py-4">
+                        <div class="container">
+                            <div class="row align-items-center">
+                                <div class="col-md-2 col-3 text-center border bg-success">正解</div>
+                                <div class="col-md-2 col-3 text-center border">{{okcount}}</div>
+                                <div class="col-md-2 col-3 text-center border bg-danger">間違</div>
+                                <div class="col-md-2 col-3 text-center border text-danger">{{errorcount}}</div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="py-4">
+                        <div class="container">
+                            <div class="d-flex">
+                                <div class="h3">間違問題</div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="py-0">
+                        <div class="container">
+                            <div class="row align-items-center" v-for="(item, index) in rslist" :key="index">
+                                <div class="col-md-1 col-2 text-center border bg-dark text-white">問題</div>
+                                <div class="col-md-1 col-2 text-center border">{{item.answer}}</div>
+                                <div class="col-md-1 col-2 text-center border bg-danger">貴方</div>
+                                <div class="col-md-1 col-2 text-center border text-danger">{{item.youranswer}}</div>
+                                <div class="col-md-1 col-2 text-center border bg-success">正解</div>
+                                <div class="col-md-1 col-2 text-center border text-success">{{item.rightanswer}}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="py-5">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-6">
+                                    <button type="button" class="btn btn-primary btn-lg btn-block" @click="btnallsave">結果保存</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                </div>
+
+            </main>
+        <!-- Optional JavaScript -->
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script>
+            var vueapp = new Vue({
+                el:'#vueapp',
+                data() {
+                    return {
+                        isover:false,
+                        okcount:'0',
+                        errorcount:'0',
+                        rslist:[],
+                        testtitle:'',
+
+                        testnumber1:{},
+                        testnumber2:{},
+                        testnumber3:{},
+                        testnumber4:{},
+                        testnumber5:{},
+                        testnumber6:{},
+                        testnumber7:{},
+
+                        answerobj :{
+                            id:String(Date.now()),
+                            "testnumber": "1",
+                            "answer1":  "",
+                            "answer2":  "",
+                            "answer3":  "",
+                            "answer4":  "",
+                            "answer5":  "",
+                            "answer6":  "",
+                            "answer7":  "",
+                            "answer8":  "",
+                            "answer9":  "",
+                            "answer10": "",
+                            "answer11": "",
+                            "answer12": "",
+                            "answer13": "",
+                            "answer14": "",
+                            "answer15": "",
+                            "answer16": "",
+                            "answer17": "",
+                            "answer18": "",
+                            "answer19": "",
+                            "answer20": "",
+                            "answer21": "",
+                            "answer22": "",
+                            "answer23": "",
+                            "answer24": "",
+                            "answer25": "",
+                            "answer26": "",
+                            "answer27": "",
+                            "answer28": "",
+                            "answer29": "",
+                            "answer30": "",
+                            "answer31": "",
+                            "answer32": "",
+                            "answer33": "",
+                            "answer34": "",
+                            "answer35": "",
+                            "answer36": "",
+                            "answer37": "",
+                            "answer38": "",
+                            "answer39": "",
+                            "answer40": "",
+                            "answer41": "",
+                            "answer42": "",
+                            "answer43": "",
+                            "answer44": "",
+                            "answer45": "",
+                            "answer46": "",
+                            "answer47": "",
+                            "answer48": "",
+                            "answer49": "",
+                            "answer50": ""
+                        }
+                    }
+                },
+                created() {
+                    var _self = this;
+                    for (let index = 1; index < 8; index++) {
+                        firebase.firestore().collection('testcount').doc('testnumber'+index).get().then(function(doc){
+                            if (doc.exists) {
+                                _self['testnumber'+index] = doc.data();
+                                console.log("Document data:", doc.data());
+                            } else {
+                                // doc.data() will be undefined in this case
+                                console.log("No such document!");
+                            }
+                        }).catch(function(error) {
+                            console.log("Error getting document:", error);
+                        });
+                    }
+                },
+                methods: {
+                    btnsave:function(){
+                        var _self = this;
+
+                        var tempRSObj = _self.answerobj;
+                        console.log(tempRSObj);
+
+                        var tempAnswer = _ANSWERLIST[Number(tempRSObj.testnumber)-1];
+                        console.log(tempAnswer);
+
+                        var rslist = [];
+                        var errorlist = []
+
+                        for (const key in tempAnswer) {
+                            if(tempRSObj[key] != tempAnswer[key]){
+                                rslist.push({
+                                    answer:key.replace( /answer/g , '' ),
+                                    youranswer:tempRSObj[key],
+                                    rightanswer:tempAnswer[key],
+                                    testnumber:tempRSObj.testnumber
+                                });
+                                errorlist.push(key);
+
+                                _self['testnumber'+_self.answerobj.testnumber][key] = Number(_self['testnumber'+_self.answerobj.testnumber][key]) + 1;
+                            }
+                        }
+
+                        _self.errorcount  = rslist.length;
+                        _self.okcount     = 50 - rslist.length;
+                        _self.rslist      = rslist;
+                        _self.csvlist     = {
+                            testnumber:tempRSObj.testnumber,
+                            errorlist:errorlist
+                        };
+
+                        _self.isover = true;
+
+
+                        firebase.firestore().collection('rslist').doc(_self.answerobj.id).set(_self.answerobj)
+                        .then(function() {
+                            console.log("Document successfully written!");
+                        })
+                        .catch(function(error) {
+                            console.error("Error writing document: ", error);
+                            alert('ネット切りました。')
+                        });
+
+                        firebase.firestore().collection('errorlist').doc(_self.answerobj.id).set(_self.csvlist)
+                        .then(function() {
+                            console.log("Document successfully written!");
+                        })
+                        .catch(function(error) {
+                            console.error("Error writing document: ", error);
+                            alert('ネット切りました。')
+                        });
+                    },
+
+                    // testsave: async function(){
+                    //     for (let index = 1; index < 8; index++) {
+                    //         await firebase.firestore().collection('testcount').doc('testnumber'+index).set({
+                    //             "answer1":  0,
+                    //             "answer2":  0,
+                    //             "answer3":  0,
+                    //             "answer4":  0,
+                    //             "answer5":  0,
+                    //             "answer6":  0,
+                    //             "answer7":  0,
+                    //             "answer8":  0,
+                    //             "answer9":  0,
+                    //             "answer10": 0,
+                    //             "answer11": 0,
+                    //             "answer12": 0,
+                    //             "answer13": 0,
+                    //             "answer14": 0,
+                    //             "answer15": 0,
+                    //             "answer16": 0,
+                    //             "answer17": 0,
+                    //             "answer18": 0,
+                    //             "answer19": 0,
+                    //             "answer20": 0,
+                    //             "answer21": 0,
+                    //             "answer22": 0,
+                    //             "answer23": 0,
+                    //             "answer24": 0,
+                    //             "answer25": 0,
+                    //             "answer26": 0,
+                    //             "answer27": 0,
+                    //             "answer28": 0,
+                    //             "answer29": 0,
+                    //             "answer30": 0,
+                    //             "answer31": 0,
+                    //             "answer32": 0,
+                    //             "answer33": 0,
+                    //             "answer34": 0,
+                    //             "answer35": 0,
+                    //             "answer36": 0,
+                    //             "answer37": 0,
+                    //             "answer38": 0,
+                    //             "answer39": 0,
+                    //             "answer40": 0,
+                    //             "answer41": 0,
+                    //             "answer42": 0,
+                    //             "answer43": 0,
+                    //             "answer44": 0,
+                    //             "answer45": 0,
+                    //             "answer46": 0,
+                    //             "answer47": 0,
+                    //             "answer48": 0,
+                    //             "answer49": 0,
+                    //             "answer50": 0,
+                    //         });
+                            
+                    //     }
+                    // }
+
+                    btnallsave:function(){
+                        var _self = this;
+                        firebase.firestore().collection('testcount').doc('testnumber'+_self.answerobj.testnumber).set(_self['testnumber'+_self.answerobj.testnumber])
+                        .then(function() {
+                            console.log("Document successfully written!");
+                            location.href = 'allrs.html';
+                        })
+                        .catch(function(error) {
+                            console.error("Error writing document: ", error);
+                            alert('ネット切りました。')
+                        });
+                    }
+                },
+            })
+        </script>
+    </body>
+</html>
+
