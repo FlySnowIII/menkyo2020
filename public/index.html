@@ -139,7 +139,7 @@
 
                     <div class="py-5">
                         <div class="container">
-                            <div class="row">
+                            <div class="row justify-content-end">
                                 <div class="col-6">
                                     <button type="button" class="btn btn-primary btn-lg btn-block" @click="btnallsave">結果保存</button>
                                 </div>
@@ -266,11 +266,15 @@
                                 });
                                 errorlist.push(key);
 
-                                _self['testnumber'+_self.answerobj.testnumber][key]['all'] = Number(_self['testnumber'+_self.answerobj.testnumber][key]['all']) + 1;
-                                _self['testnumber'+_self.answerobj.testnumber][key]['now'] = Number(_self['testnumber'+_self.answerobj.testnumber][key]['now']) + 1;
+                                let tempTestNumberObj = _self['testnumber'+_self.answerobj.testnumber][key];
+                                tempTestNumberObj.all = Number(tempTestNumberObj.all) + 1;
+                                tempTestNumberObj.now = Number(tempTestNumberObj.now) + 1;
+
                             }
                             else{
-                                _self['testnumber'+_self.answerobj.testnumber][key]['now'] = Number(_self['testnumber'+_self.answerobj.testnumber][key]['now']) - 1;
+                                let tempTestNumberObj = _self['testnumber'+_self.answerobj.testnumber][key];
+                                tempTestNumberObj.now = Number(tempTestNumberObj.now) - 1;
+                                tempTestNumberObj.now = tempTestNumberObj.now<1 ? 0 :tempTestNumberObj.now;
                             }
                         }
 
